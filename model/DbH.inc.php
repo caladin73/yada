@@ -1,5 +1,5 @@
 <?php
-require_once 'model/DbP.inc.php';
+require_once 'DbP.inc.php';
 
 class DbH extends DbP {
     private static $dbh;

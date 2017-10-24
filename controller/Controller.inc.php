@@ -5,9 +5,10 @@
  * @copyright (c) 2017, 
  * @license http://www.fsf.org/licensing/ GPLv3
  */
-require_once 'model/Model.inc.php';
-require_once 'model/Users.inc.php';
-require_once 'view/LoginView.inc.php';
+require_once './model/Model.inc.php';
+require_once './model/Users.inc.php';
+require_once './view/LoginView.inc.php';
+require_once './view/UserView.inc.php';
 
 class Controller {
     private $model; // bliver sat i action()

@@ -32,13 +32,7 @@ and open the template in the editor.
         <p>Yadda Yadda Yadda &#153</p>
         <?php
             session_start();
-            require_once './model/Model.inc.php'; // domainmodel
-            require_once './model/Image.inc.php'; // domainmodel
-            require_once './model/Listener.inc.php'; // domainmodel
             require_once './controller/Controller.inc.php'; // domainmodel
-         /*   require_once './view/TagView.inc.php';
-            require_once './view/UsersView.inc.php';
-            require_once './view/YaddaView.inc.php';*/
 
             $controller = new Controller($_GET, $_POST);
             $controller->action();
