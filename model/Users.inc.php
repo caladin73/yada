@@ -7,7 +7,10 @@
 
 error_reporting(E_ALL);
 
-class Users {
+require_once 'DbP.inc.php';
+require_once 'DbH.inc.php';
+
+class Users extends Model {
     private $username;
     private $password;
     private $email;
@@ -16,13 +19,11 @@ class Users {
     private $activated;
     private $profileImage;
     
-    function __construct($Username, $Password, $Email, $Name, $Admin, $Activated, $ProfileImage) {
+    function __construct($Username, $Password, $Email, $Name, $ProfileImage) {
         $this->username = $Username;
         $this->password = $Password;
         $this->email = $Email;
         $this->name = $Name;
-        $this->admin = $Admin;
-        $this->activated = $Activated;
         $this->profileImage = $ProfileImage;
     }
 
@@ -76,10 +77,10 @@ class Users {
     }
     
     public function create() {
-        $sql = "insert into user (Username, Password, Name, Email, Admin, ProfileImage, Activated) 
+        $sql = "insert into Users (Username, Password, Name, Email, Admin, ProfilImage, Activated) 
                         values (:uid, :pwd, :name, :email, :admin, :profileimg, :activated)";
 
-        $dbh = DbH::connect();
+        $dbh = Model::connect();
         try {
             $q = $dbh->prepare($sql);
             $q->bindValue(':uid', $this->getUsername());
@@ -100,7 +101,7 @@ class Users {
     public function activateUser () {
         $sql = "UPDATE Users SET activated = (:activated) WHERE username = (:username)";
 
-        $dbh = dbh::connect();
+        $dbh = DbH::connect();
         try {
             $q = $dbh->prepare($sql);
             $q->bindValue(':username', $this->getUsername());
@@ -116,11 +117,20 @@ class Users {
     public function retrieveMany () {
         
     }
-    public function retrieveOne () {
+    public static function retrieveOne () {
         
     }
     
-    public function createObject () {
+    public function update() {
         
+    }
+    
+    public static function createObject ($a) {
+        $act = isset($a['activated']) ? $a['activated'] : null;
+        $user = new Users($a['username'], $a['email'], $a['name'], $a['profileimage'], $act);
+        if (isset($a['password'])) {
+            $user->setPassword($a['password']);
+        }
+        return $user;
     }
 }

@@ -15,7 +15,7 @@ class UserView extends View {
     }
     
     private function displayul() {
-        $users = User::retrievem();
+        $users = Users::retrievem();
         $s = "<div class='haves'>";
         foreach ($users as $user) {
             $s .=  sprintf("%s<br/>\n"
@@ -26,7 +26,7 @@ class UserView extends View {
     }
     
     private function displayUser() {
-        $user = User::retriveOne();
+        $user = Users::retriveOne();
         $s = "<div class='haves'>";
         if ($user == 'Placeholder') {
             $s .= sprintf("%s<br/>\n" , $user);
@@ -37,7 +37,7 @@ class UserView extends View {
 
         private function registerForm() {
         $s = sprintf("
-            <form action='%s?f=U' method='post'>\n
+            <form action='%s?f=register' method='post'>\n
             <div class='gets'>\n
                 <h3>Create New User</h3>\n
                 <p>\n
@@ -58,7 +58,7 @@ class UserView extends View {
                 </p>\n
                 <p>\n
                     Pwd:<br/>
-                    <input type='password' name='pwd1'/>\n
+                    <input type='password' name='password'/>\n
                 </p>\n
                  <p>\n
                     Pwd repeat:<br/>
@@ -80,8 +80,7 @@ class UserView extends View {
     }
     
     private function displayRegister() {
-        $s = sprintf("<main class='main'>\n%s\n%s</main>\n"
-                    , $this->displayUser()
+        $s = sprintf("<main class='main'>\n%s</main>\n"
                     , $this->registerForm());
         return $s;
     }

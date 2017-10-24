@@ -1,6 +1,6 @@
 <?php
-require_once 'DbH.php';
-require_once 'DbP.php';
+require_once 'DbH.inc.php';
+require_once 'DbP.inc.php';
 
 $dbname = DbP::DB;
 $dbuser = DbP::DBUSER;

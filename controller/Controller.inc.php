@@ -36,9 +36,9 @@ class Controller {
                 break;
             case 'register':   //user create
                 $this->model = new Users(null, null, null, null, null, null, null); // init a model
-                $view1 = new UserView($this->model);                  // init a view
+                $view1 = new UserView($this->model);// init a view
                 if (count($this->post) > 0) {
-                    $this->create($this->post);               // activate controller
+                    $this->createUser($this->post);               // activate controller
                 }
                 $view1->display();
                 break;
@@ -65,7 +65,7 @@ class Controller {
         foreach ($get as $key => $value) {
             $$key = $value;
         }
-        $this->function = isset($function) ? $function : 'login';
+        $this->function = isset($f) ? $f : 'login';
     }
 
     public function auth($p) {
@@ -104,7 +104,7 @@ class Controller {
     public function createUser($p) {
         if (isset($p) && count($p) > 0) {
             $p['id'] = null; // augment array with dummy
-            $user = User::createObject($p);  // object from array
+            $user = Users::createObject($p);  // object from array
             $user->create();         // model method to insert into db
             $p = array();
         }
