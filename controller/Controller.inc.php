@@ -33,11 +33,11 @@ class Controller {
                 $this->logout();
                 $view1->display();
                 break;
-            case 'U':   //user create
+            case 'register':   //user create
                 $this->model = new Users(null, null, null, null, null, null, null); // init a model
                 $view1 = new UserView($this->model);                  // init a view
                 if (count($this->post) > 0) {
-                    $this->createUser($this->post);               // activate controller
+                    $this->create($this->post);               // activate controller
                 }
                 $view1->display();
                 break;

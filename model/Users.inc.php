@@ -76,7 +76,25 @@ class Users {
     }
     
     public function create() {
-        
+        $sql = "insert into user (Username, Password, Name, Email, Admin, ProfileImage, Activated) 
+                        values (:uid, :pwd, :name, :email, :admin, :profileimg, :activated)";
+
+        $dbh = DbH::connect();
+        try {
+            $q = $dbh->prepare($sql);
+            $q->bindValue(':uid', $this->getUsername());
+            $q->bindValue(':pwd', password_hash($this->getPassword(), PASSWORD_DEFAULT));
+            $q->bindValue(':name', $this->getName());
+            $q->bindValue(':email', $this->getEmail());
+            $q->bindValue(':admin', 0);
+            $q->bindValue(':profileimg', $this->getProfileImage());
+            $q->bindValue(':activated', 0);
+            $q->execute();
+        } catch(PDOException $e) {
+            printf("<p>Insert of user failed: <br/>%s</p>\n",
+                $e->getMessage());
+        }
+        $dbh->query('commit');
     }
     
     public function activateUser () {
