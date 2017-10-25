@@ -9,6 +9,7 @@ require_once './model/Model.inc.php';
 require_once './model/Users.inc.php';
 require_once './view/LoginView.inc.php';
 require_once './view/UserView.inc.php';
+require_once './model/AuthA.inc.php';
 
 class Controller {
     private $model; // bliver sat i action()
