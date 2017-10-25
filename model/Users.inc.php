@@ -131,7 +131,7 @@
         {
             $sql = "UPDATE Users SET activated = (:activated) WHERE username = (:username)";
 
-            $dbh = DbH::connect();
+            $dbh = Model::connect();
             try {
                 $q = $dbh->prepare($sql);
                 $q->bindValue(':username', $this->getUsername());

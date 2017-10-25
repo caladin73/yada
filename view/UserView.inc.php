@@ -78,9 +78,34 @@ class UserView extends View {
         $s .= "          </form>\n";
         include_once './js/createUserVerify.js';
         return $s;
-        
     }
-    
+
+    private function userActivateForm() {
+        $s = sprintf("
+            <form action='%s?f=Udb' method='post'>\n
+            <div class='gets'>\n
+                <h3>Activate User</h3>\n
+                <p>\n
+                    Username:<br/>
+                    <input type='text' name='uid'/>\n
+                </p>\n
+                <input type='radio' name='activated' value='1' checked> Activate<br>
+                <input type='radio' name='activated' value='0'> Deactivate<br>
+                <p>\n
+                    <input type='submit' value='Go'/>
+                </p>
+            </div>", $_SERVER['PHP_SELF']);
+
+        if (!Model::areCookiesEnabled()) {
+            $s .= "<tr><td colspan='2' class='err'>Cookies 
+            from this domain must be 
+                      enabled before attempting login.</td></tr>";
+        }
+        $s .= "          </div>\n";
+        $s .= "          </form>\n";
+        return $s;
+    }
+
     private function displayRegister() {
         $s = sprintf("<main class='main'>\n%s</main>\n"
                     , $this->registerForm());
