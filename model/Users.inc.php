@@ -16,15 +16,13 @@ class Users extends Model {
     private $name;
     private $email;
     private $admin;
-    private $profileImage;
     private $activated;
         
-    function __construct($Username, $Password, $Name, $Email, $ProfileImage) {
+    function __construct($Username, $Password, $Name, $Email) {
         $this->username = $Username;
         $this->password = $Password;
         $this->name = $Name;
         $this->email = $Email;
-        $this->profileImage = $ProfileImage;
     }
 
     public function getUsername() {
@@ -69,16 +67,12 @@ class Users extends Model {
         $this->activated = $Activated;
     }
     
-    public function getProfileImage() {
-        return $this->profileImage;
-    }
-    public function setProfileImage($ProfileImage) {
-        $this->profileImage = $ProfileImage;
-    }
-    
+
     public function create() {
         $sql = "insert into Users (Username, Password, Name, Email, Admin, ProfilImage, Activated) 
                         values (:uid, :pwd, :name, :email, :admin, :profileimg, :activated)";
+
+        $ProfileImage = addslashes(file_get_contents($_FILES['profileimage']['tmp_name']));
 
         $dbh = Model::connect();
         try {
@@ -88,7 +82,7 @@ class Users extends Model {
             $q->bindValue(':name', $this->getName());
             $q->bindValue(':email', $this->getEmail());
             $q->bindValue(':admin', 0);
-            $q->bindValue(':profileimg', 0);
+            $q->bindValue(':profileimg', $ProfileImage);
             $q->bindValue(':activated', 0);
             $q->execute();
         } catch(PDOException $e) {
@@ -125,7 +119,7 @@ class Users extends Model {
     }
     public static function createObject ($a) {
         //$Username, $Password, $Name, $Email, $ProfileImage (Order important!)
-        $user = new Users($a['username'], $a['password'], $a['name'], $a['email'], $a['profileimage']);
+        $user = new Users($a['username'], $a['password'], $a['name'], $a['email']);
         if (isset($a['password'])) {
             $user->setPassword($a['password']);
         }

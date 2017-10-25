@@ -37,7 +37,7 @@ class UserView extends View {
 
         private function registerForm() {
         $s = sprintf("
-            <form id='formalia' action='%s?f=register' method='post'>\n
+            <form id='formalia' action='%s?f=register' method='post' enctype=\"multipart/form-data\">\n
             <div class='gets'>\n
                 <h3>Create New User</h3>\n
                 <p>\n
