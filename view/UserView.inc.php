@@ -15,7 +15,7 @@ class UserView extends View {
     }
     
     private function displayul() {
-        $users = Users::retrievem();
+        $users = Users::retrieveMany();
         $s = "<div class='haves'>";
         foreach ($users as $user) {
             $s .=  sprintf("%s<br/>\n"
@@ -82,12 +82,12 @@ class UserView extends View {
 
     private function userActivateForm() {
         $s = sprintf("
-            <form action='%s?f=Udb' method='post'>\n
+            <form action='%s?f=profile' method='post'>\n
             <div class='gets'>\n
                 <h3>Activate User</h3>\n
                 <p>\n
                     Username:<br/>
-                    <input type='text' name='uid'/>\n
+                    <input type='text' name='username'/>\n
                 </p>\n
                 <input type='radio' name='activated' value='1' checked> Activate<br>
                 <input type='radio' name='activated' value='0'> Deactivate<br>
@@ -111,9 +111,19 @@ class UserView extends View {
                     , $this->registerForm());
         return $s;
     }
+    
+    private function displayActivate() {
+        $s = sprintf("<main class='main'>\n%s\n%s</main>\n"
+                    , $this->displayul()
+                    , $this->userActivateForm());
+        return $s;
+    }
 
     public function display(){
        $this->output($this->displayRegister());
     }
     
+    public function displayAdmin() {
+        $this->output($this->displayActivate());
+    }
 }
