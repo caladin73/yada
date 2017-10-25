@@ -46,14 +46,14 @@ class UserView extends View {
                 </p>\n
                 <p>\n
                     Email:<br/>
-                    <input type='text' name='email'/>\n
+                    <input type='email' name='email'/>\n
                 </p>\n
                 <p>\n
                     Name:<br/>
                     <input type='text' name='name'/>\n
                 </p>\n
                 <p>\n
-                    Username:<br/>
+                    Profile Image:<br/>
                     <input type='file' name='profileimage'/>\n
                 </p>\n
                 <p>\n
