@@ -6,7 +6,7 @@
  * @Author: Daniel, Jesper, Marianne & Peter
  */
 
-require_once 'View.inc.php';
+require_once 'view/View.inc.php';
 
 class LoginView extends View {
     
