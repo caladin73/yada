@@ -10,7 +10,10 @@
  * Abstract class for the login mechanism.
  * @author nml
  */
-abstract class AuthA {
+
+//require_once 'AuthI.inc.php';
+
+abstract class AuthA { // implements AuthI {
   const SESSVAR = 'nAuth42';
   protected $userId;
   protected $email;

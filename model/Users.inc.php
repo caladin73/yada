@@ -13,17 +13,17 @@ require_once 'DbH.inc.php';
 class Users extends Model {
     private $username;
     private $password;
-    private $email;
     private $name;
+    private $email;
     private $admin;
-    private $activated;
     private $profileImage;
-    
-    function __construct($Username, $Password, $Email, $Name, $ProfileImage) {
+    private $activated;
+        
+    function __construct($Username, $Password, $Name, $Email, $ProfileImage) {
         $this->username = $Username;
         $this->password = $Password;
-        $this->email = $Email;
         $this->name = $Name;
+        $this->email = $Email;
         $this->profileImage = $ProfileImage;
     }
 
@@ -88,7 +88,7 @@ class Users extends Model {
             $q->bindValue(':name', $this->getName());
             $q->bindValue(':email', $this->getEmail());
             $q->bindValue(':admin', 0);
-            $q->bindValue(':profileimg', $this->getProfileImage());
+            $q->bindValue(':profileimg', 0);
             $q->bindValue(':activated', 0);
             $q->execute();
         } catch(PDOException $e) {
@@ -120,14 +120,12 @@ class Users extends Model {
     public static function retrieveOne () {
         
     }
-    
     public function update() {
         
     }
-    
     public static function createObject ($a) {
-        $act = isset($a['activated']) ? $a['activated'] : null;
-        $user = new Users($a['username'], $a['email'], $a['name'], $a['profileimage'], $act);
+        //$Username, $Password, $Name, $Email, $ProfileImage (Order important!)
+        $user = new Users($a['username'], $a['password'], $a['name'], $a['email'], $a['profileimage']);
         if (isset($a['password'])) {
             $user->setPassword($a['password']);
         }
