@@ -43,10 +43,13 @@ class Controller {
                 }
                 $view1->display();
                 break;
-            case 'Ue':   //user edit 
+            case 'profile':   //user edit 
                 $this->model = new Users(null, null, null, null, null, null, null); // init a model
-                $view1 = new UserEditView($this->model);                  // init a view
-                $view1->display();
+                $view1 = new UserView($this->model);                  // init a view
+                if (count($this->post) > 0) {
+                    $this->activateUser($this->post);
+                }
+                $view1->displayAdmin();
                 break;
             case 'Udb':   //user edit 
                 $this->model = new Users(null, null, null, null, null, null, null); // init a model
@@ -88,7 +91,8 @@ class Controller {
      */
     public function activateUser($p) {
         if (isset($p) && count($p) > 0) {
-            User::activateUser(); 
+            $active = new Users($p['username'], null, null, null, $p['activated']);
+            $active->activateUser();
         }
     }
     

@@ -19,12 +19,13 @@
         private $admin;
         private $activated;
 
-        function __construct($Username, $Password, $Name, $Email)
+        function __construct($Username, $Password, $Name, $Email, $Activated)
         {
             $this->username = $Username;
             $this->password = $Password;
             $this->name = $Name;
             $this->email = $Email;
+            $this->activated = $Activated;
         }
 
         public function getUsername()
@@ -144,12 +145,34 @@
             $dbh->query('commit');
         }
 
-        public function retrieveMany()
+        public static function retrieveMany()
         {
+            $users = array();
+        $dbh = Model::connect();
 
+        $sql = "select *";
+        $sql .= " from view_allUsers";
+        try {
+            $q = $dbh->prepare($sql);
+            $q->execute();
+            while ($row = $q->fetch()) {
+                $user = new Users($row['Username'], null, $row['Name'], $row['Email'], $row['Activated']);
+                //$user = self::createObject($row);
+                array_push($users, $user);
+            }
+        } catch(PDOException $e) {
+            printf("<p>Query of users failed: <br/>%s</p>\n",
+                $e->getMessage());
+        } finally {
+            return $users;
+        }
+        }
+        
+        public function __toString() {
+            return $this->getUsername()." - ".($this->activated ? ', activated' : ', not activated');
         }
 
-        public static function retrieveOne()
+                public static function retrieveOne()
         {
 
         }
@@ -162,7 +185,7 @@
         public static function createObject($a)
         {
             //$Username, $Password, $Name, $Email, $ProfileImage (Order important!)
-            $user = new Users($a['username'], $a['password'], $a['name'], $a['email']);
+            $user = new Users($a['username'], $a['password'], $a['name'], $a['email'], $a['activated']);
             if (isset($a['password'])) {
                 $user->setPassword($a['password']);
             }
