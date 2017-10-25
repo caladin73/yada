@@ -30,7 +30,7 @@ class Controller {
                 $view1->display(); 
                 break;
             case 'logout':   //logout
-                $this->model = new Users(null, null, null, null);
+                $this->model = new Users(null, null, null, null, null);
                 $view1 = new LoginView($this->model);
                 $this->logout();
                 $view1->display();
@@ -109,7 +109,7 @@ class Controller {
     public function createUser($p) {
         if (isset($p) && count($p) > 0) {
             $p['id'] = null; // augment array with dummy
-            $user = Users::createObject($p);  // object from array
+            $user = new Users($p['username'], $p['password'], $p['name'], $p['email'], null);/*Users::createObject($p);*/  // object from array
             $user->create();         // model method to insert into db
             $p = array();
         }
