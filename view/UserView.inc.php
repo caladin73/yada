@@ -37,7 +37,7 @@ class UserView extends View {
 
         private function registerForm() {
         $s = sprintf("
-            <form action='%s?f=register' method='post'>\n
+            <form id='formalia' action='%s?f=register' method='post'>\n
             <div class='gets'>\n
                 <h3>Create New User</h3>\n
                 <p>\n
@@ -76,7 +76,9 @@ class UserView extends View {
         }
         $s .= "          </div>\n";
         $s .= "          </form>\n";
+        include_once './js/createUserVerify.js';
         return $s;
+        
     }
     
     private function displayRegister() {
