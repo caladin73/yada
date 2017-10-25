@@ -30,7 +30,7 @@ class Controller {
                 $view1->display(); 
                 break;
             case 'logout':   //logout
-                $this->model = new Users(null, null, null, null);
+                $this->model = new Users(null, null, null, null, null);
                 $view1 = new LoginView($this->model);
                 $this->logout();
                 $view1->display();
