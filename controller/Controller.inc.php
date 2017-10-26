@@ -10,7 +10,11 @@ require_once './model/Users.inc.php';
 require_once './model/Yadda.inc.php';
 require_once './view/LoginView.inc.php';
 require_once './view/UserView.inc.php';
+<<<<<<< HEAD
 require_once './view/YaddaView.inc.php';
+=======
+require_once './model/AuthA.inc.php';
+>>>>>>> Peter
 
 class Controller {
     private $model; // bliver sat i action()
@@ -29,10 +33,10 @@ class Controller {
                 if (count($this->post) > 0) {
                     $this->auth($this->post);
                 }
-                $view1->display();
+                $view1->display(); 
                 break;
             case 'logout':   //logout
-                $this->model = new User(null, null, null);
+                $this->model = new Users(null, null, null, null, null);
                 $view1 = new LoginView($this->model);
                 $this->logout();
                 $view1->display();
@@ -45,10 +49,13 @@ class Controller {
                 }
                 $view1->display();
                 break;
-            case 'Ue':   //user edit 
+            case 'profile':   //user edit 
                 $this->model = new Users(null, null, null, null, null, null, null); // init a model
-                $view1 = new UserEditView($this->model);                  // init a view
-                $view1->display();
+                $view1 = new UserView($this->model);                  // init a view
+                if (count($this->post) > 0) {
+                    $this->activateUser($this->post);
+                }
+                $view1->displayAdmin();
                 break;
             case 'Udb':   //user edit 
                 $this->model = new Users(null, null, null, null, null, null, null); // init a model
@@ -82,11 +89,11 @@ class Controller {
 
     public function auth($p) {
         if (isset($p) && count($p) > 0) {
-            if (!Authentication::isAuthenticated() 
+            if (!AuthA::isAuthenticated() 
                     && Model::areCookiesEnabled()
-                    && isset($p['uid'])
-                    && isset($p['pwd'])) {
-                        Authentication::authenticate($p['uid'], $p['pwd']);
+                    && isset($p['username'])
+                    && isset($p['password'])) {
+                        Authentication::authenticate($p['username'], $p['password']);
             }
             $p = array();
         }
@@ -99,7 +106,8 @@ class Controller {
      */
     public function activateUser($p) {
         if (isset($p) && count($p) > 0) {
-            User::activateUser(); 
+            $active = new Users($p['username'], null, null, null, $p['activated']);
+            $active->activateUser();
         }
     }
     
@@ -116,7 +124,7 @@ class Controller {
     public function createUser($p) {
         if (isset($p) && count($p) > 0) {
             $p['id'] = null; // augment array with dummy
-            $user = Users::createObject($p);  // object from array
+            $user = new Users($p['username'], $p['password'], $p['name'], $p['email'], null);/*Users::createObject($p);*/  // object from array
             $user->create();         // model method to insert into db
             $p = array();
         }

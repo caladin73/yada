@@ -1,69 +1,51 @@
 <?php
-   require_once 'AuthA.inc.php'; // include the login parent
-/*
- * Login mechanism for educational purposes.
- * Experimental
- * Should be project specific
- * Copyright nml, 2015
+   
+/* 
+ * model/AuthA.inc.php
+ * @Project: YaddaYaddaYadda
+ * @Author: Daniel, Jesper, Marianne & Peter
  */
 
-/**
- * Description of Authentication
- * Authentication is a Singleton, hence the private constructor.
- * It is instantiated by Authentication::authenticate()
- * @author nml
- */
+require_once 'AuthA.inc.php'; // include the login parent
+
 class Authentication extends AuthA {
-    const DISPVAR = 'waldo42';
-    private $name;
-
-    private function __construct($voter, $pwd) {
+    protected function __construct($user, $pwd) {
+        parent::__construct($user);
         try {
-            self::dbLookUp($voter, $pwd);         // invoke auth
-            $_SESSION[self::SESSVAR] = $this->getEmail(); // if succesfull
-            $_SESSION[self::DISPVAR] = $this->getName();   // if succesfull
+            self::dbLookUp($user, $pwd);                        // invoke auth
+            $_SESSION[self::$sessvar] = $this->getUserId();     // succes
         }
         catch (Exception $e) {
-            self::$logInstance = NULL;
-        }    
+            self::$logInstance = FALSE;
+            unset($_SESSION[self::$sessvar]);                   //miserys
+        }      
     }
 
     public static function authenticate($user, $pwd) {
-        if (self::$logInstance === NULL) {
+        if (! self::$logInstance) {
             self::$logInstance = new Authentication($user, $pwd);
         }
         return self::$logInstance;
     }
-    
-    protected function dbLookUp($user, $pwdtry) {
-      // Using prepared statements to prevent SQL injection
-        $db = DbH::getDbH();
-        $sql = "select firstname, uid, password, activated 
-                from user
-                where uid = :uid
-                and activated is true";
+
+    protected static function dbLookUp($user, $pwd) {
+        // Using prepared statement to prevent SQL injection
+        $sql = "select Username, Password 
+                from Users
+                where Username = :uid
+                and Activated = 1;";
+        $dbh = Model::connect();
         try {
-            $q = $db->prepare($sql);
+            $q = $dbh->prepare($sql);
             $q->bindValue(':uid', $user);
             $q->execute();
             $row = $q->fetch();
-            if ($row['uid'] === $user
-                    && password_verify($pwdtry, $row['password'])) { 
-                $this->name = $row['firstname'];
-                $this->userId = $user;
-            } else {
-                throw new Exception("Not authenticated", 42);
+            if (!($row['Username'] === $user
+                    && password_verify($pwd, $row['Password']))) { 
+                 throw new Exception("Not authenticated", 42);   //misery
             }
         } catch(PDOException $e) {
             die($e->getMessage());
         }
-    }
-    
-    private function getName() {
-        return $this->name;
-    }
-    
-    public static function getDispvar() {
-        return $_SESSION[self::DISPVAR];
     }
 }
