@@ -18,78 +18,85 @@
         private $email;
         private $admin;
         private $activated;
+        private $profileImage;
 
-        function __construct($Username, $Password, $Name, $Email, $Activated)
-        {
-            $this->username = $Username;
-            $this->password = $Password;
+    function __construct($Username, $Password, $Name, $Email, $Activated)
+    {
+        $this->username = $Username;
+        $this->password = $Password;
         $this->email = $Email;
-            $this->name = $Name;
-            $this->email = $Email;
-            $this->activated = $Activated;
-        }
+        $this->name = $Name;
+        $this->email = $Email;
+        $this->activated = $Activated;
+    }
+
+    function getProfileImage() {
+        return $this->profileImage;
+    }
+
+    function setProfileImage($profileImage) {
+        $this->profileImage = $profileImage;
+    }
 
     public function getUsername() {
-            return $this->username;
-        }
+        return $this->username;
+    }
+    
     public function setUsername($Username) {
-            $this->username = $Username;
-        }
+        $this->username = $Username;
+    }
 
     public function getPassword() {
-            return $this->password;
-        }
+        return $this->password;
+    }
     public function setPassword($Password) {
-            $this->password = $Password;
-        }
+        $this->password = $Password;
+    }
 
     public function getEmail() {
-            return $this->email;
-        }
+        return $this->email;
+    }
     public function setEmail($Email) {
-            $this->email = $Email;
-        }
+        $this->email = $Email;
+    }
 
     public function getName() {
-            return $this->name;
-        }
+        return $this->name;
+    }
     public function setName($Name) {
-            $this->name = $Name;
-        }
+        $this->name = $Name;
+    }
 
     public function getAdmin() {
-            return $this->admin;
-        }
+        return $this->admin;
+    }
     public function setAdmin($Admin) {
-            $this->admin = $Admin;
-        }
+        $this->admin = $Admin;
+    }
 
     public function getActivated() {
-            return $this->activated;
-        }
+        return $this->activated;
+    }
     public function setActivated($Activated) {
-            $this->activated = $Activated;
-        }
+        $this->activated = $Activated;
+    }
 
+    public function create()
+    {
+        if(!(isset($_FILES['profileimage']))) {
+            header("Location: index.php?f=register&error=2");
+        } else if ($_FILES['profileimage']['error'] > UPLOAD_ERR_OK) {
 
-        public function create()
-        {
-
-            if(!(isset($_FILES['profileimage']))) {
-                header("Location: index.php?f=register&error=2");
-            } else if ($_FILES['profileimage']['error'] > UPLOAD_ERR_OK) {
-
-                if($_FILES['profileimage']['error'] == UPLOAD_ERR_FORM_SIZE) {
-                    $_SESSION["error"] = "The file is too big";
-                }
-                header("Location: index.php?f=register&error=1");
-            } else {
-
+            if($_FILES['profileimage']['error'] == UPLOAD_ERR_FORM_SIZE) {
+                $_SESSION["error"] = "The file is too big";
+            }
+            header("Location: index.php?f=register&error=1");
+        } else {
 
             $sql = "insert into Users (Username, Password, Name, Email, Admin, ProfilImage, Activated, mimetype) 
                         values (:uid, :pwd, :name, :email, :admin, :profileimg, :activated, :mimetype)";
 
-            $ProfileImage = addslashes(file_get_contents($_FILES['profileimage']['tmp_name']));
+            $profileImage = addslashes(file_get_contents($_FILES['profileimage']['tmp_name']));
             $imagetype = $_FILES['profileimage']['type'];
 
             $dbh = Model::connect();
@@ -100,7 +107,7 @@
                 $q->bindValue(':name', $this->getName());
                 $q->bindValue(':email', $this->getEmail());
                 $q->bindValue(':admin', 0);
-            $q->bindValue(':profileimg', $this->getProfileImage());
+                $q->bindValue(':profileimg', $profileImage);
                 $q->bindValue(':activated', 0);
                 $q->bindValue(':mimetype', $imagetype);
                 $q->execute();
@@ -109,7 +116,8 @@
                     $e->getMessage());
             }
             $dbh->query('commit');
-        }}
+        }    
+    }
 
     public function activateUser () {
             $sql = "UPDATE Users SET activated = (:activated) WHERE username = (:username)";
@@ -127,8 +135,8 @@
             $dbh->query('commit');
         }
 
-        public static function retrieveMany()
-        {
+    public static function retrieveMany()
+    {
             $users = array();
         $dbh = Model::connect();
 
@@ -148,29 +156,29 @@
         } finally {
             return $users;
         }
-        }
-        
-        public function __toString() {
-            return $this->getUsername()." - ".($this->activated ? ', activated' : ', not activated');
-        }
-
-                public static function retrieveOne()
-        {
-
-        }
-
-        public function update()
-        {
-
-        }
-
-        public static function createObject($a)
-        {
-            //$Username, $Password, $Name, $Email, $ProfileImage (Order important!)
-            $user = new Users($a['username'], $a['password'], $a['name'], $a['email'], $a['activated']);
-            if (isset($a['password'])) {
-                $user->setPassword($a['password']);
-            }
-            return $user;
-        }
     }
+        
+    public function __toString() {
+        return $this->getUsername()." - ".($this->activated ? ', activated' : ', not activated');
+    }
+
+    public static function retrieveOne()
+    {
+
+    }
+
+    public function update()
+    {
+
+    }
+
+    public static function createObject($a)
+    {
+        //$Username, $Password, $Name, $Email, $ProfileImage (Order important!)
+        $user = new Users($a['username'], $a['password'], $a['name'], $a['email'], $a['activated']);
+        if (isset($a['password'])) {
+            $user->setPassword($a['password']);
+        }
+        return $user;
+    }
+}

@@ -1,3 +1,4 @@
+<script>
 /* 
  * createUserVerify.js
  * This javascript function verifies if "password" and "repeat password" matches
@@ -5,7 +6,6 @@
  * @author: Marianne, Jepser, Peter & Daniel
  */
 
-<script>
     'use strict';
     var check = function (e) {
         if (document.forms.formalia.password.value !== document.forms.formalia.pwd2.value) {

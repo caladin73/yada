@@ -8,7 +8,6 @@
 
 require_once 'view/View.inc.php';
 
-
 class YaddaView extends View {
     
     public function __construct($model) {
@@ -28,9 +27,6 @@ class YaddaView extends View {
             $nodes = "";
             $nodes = Yadda::getChildren($yadda->getYaddaID(), 1, $nodes);
             $s .= $nodes;
-            /*foreach ($nodes as $node) {
-                $s .= str_repeat('&nbsp;&nbsp;',$node->getLevel()).$node."<br />";
-            }*/
         }
         $s .= "</div>\n";
         return $s;
@@ -68,7 +64,6 @@ class YaddaView extends View {
     }
     
     public function display() {
-       // $this->output($this->yaddaForm());
         $this->output($this->displayYadda());
     }   
 }

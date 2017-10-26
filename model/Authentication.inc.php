@@ -9,6 +9,7 @@
 require_once 'AuthA.inc.php'; // include the login parent
 
 class Authentication extends AuthA {
+    
     protected function __construct($user, $pwd) {
         parent::__construct($user);
         try {
@@ -20,10 +21,6 @@ class Authentication extends AuthA {
             unset($_SESSION[self::$sessvar]);                   //miserys
         }      
     }
-
-    /*public static function getEmail() {
-        return $_SESSION[self::SESSVAR];
-    }*/
     
     public static function getUsername() {
         return $_SESSION[self::DISPVAR2];

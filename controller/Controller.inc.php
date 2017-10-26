@@ -47,6 +47,9 @@ class Controller {
                 $view1->display();
                 break;
             case 'profile':   //user edit 
+                if(!Authentication::isAuthenticated()) {
+                    header('Location: ./index.php');
+                }
                 $this->model = new Users(null, null, null, null, null, null, null); // init a model
                 $view1 = new UserView($this->model);                  // init a view
                 if (count($this->post) > 0) {
@@ -54,14 +57,10 @@ class Controller {
                 }
                 $view1->displayAdmin();
                 break;
-            case 'Udb':   //user edit 
-                $this->model = new Users(null, null, null, null, null, null, null); // init a model
-                if (count($this->post) > 0) {
-                    $this->updateUser($this->post['uid']);               // activate controller
-                }
-                header("Location: ./index.php");
-                break;
             case 'yadda':   //yadda form
+                if(!Authentication::isAuthenticated()) {
+                    header('Location: ./index.php');
+                }
                 $this->model = new Yadda(null, null, null, null, null, null, null); // init a model
                 $view1 = new YaddaView($this->model);// init a view
                 if (count($this->post) > 0) {
@@ -69,12 +68,10 @@ class Controller {
                 }
                 $view1->display();
                 break;
-            //case osv...
         }
     }
     
     public function __construct($get, $post, $file) {
-        //$this->model = $model;
         $this->get = $get;
         $this->post = $post;
         $this->file = $file;
@@ -97,10 +94,6 @@ class Controller {
         return;
     }
     
-    /*
-     * TODO: denne skal også være med i UML.
-     * Eller skal den hedde noget med 'update'?
-     */
     public function activateUser($p) {
         if (isset($p) && count($p) > 0) {
             $active = new Users($p['username'], null, null, null, $p['activated']);
