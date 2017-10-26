@@ -54,7 +54,7 @@ class UserView extends View {
                 </p>\n
                 <p>\n
                     Profile Image:<br/>
-                    <input type='file' name='profileimage'/>\n
+                <input type=\"file\" name=\"profileimage\" accept=\"image/*\">\n
                 </p>\n
                 <p>\n
                     Pwd:<br/>
