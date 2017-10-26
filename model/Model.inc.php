@@ -6,10 +6,10 @@
  * @copyright (c) 2017, nml
  * @license http://www.fsf.org/licensing/ GPLv3
  */
-require_once 'model/DbH.inc.php';
-require_once 'model/ModelIf.inc.php';
-require_once 'model/Model.inc.php';
-require_once 'model/Authentication.inc.php';
+require_once 'DbH.inc.php';
+require_once 'ModelIf.inc.php';
+require_once 'Model.inc.php';
+require_once 'Authentication.inc.php';
 
 abstract class Model implements ModelIf {
     /*
