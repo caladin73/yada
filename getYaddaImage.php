@@ -1,5 +1,6 @@
 <?php
     session_start();
+
     require_once './model/Model.inc.php';
     $dbh = Model::connect();
 
