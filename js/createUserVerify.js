@@ -1,3 +1,5 @@
+<script>
+
 /* 
  * createUserVerify.js
  * This javascript function verifies if "password" and "repeat password" matches
@@ -19,3 +21,4 @@
                 document.forms.formalia.addEventListener('submit', check);
             }
             window.addEventListener('load', init);
+</script>
