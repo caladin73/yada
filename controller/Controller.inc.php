@@ -7,15 +7,21 @@
  */
 require_once './model/Model.inc.php';
 require_once './model/Users.inc.php';
+require_once './model/Yadda.inc.php';
 require_once './view/LoginView.inc.php';
 require_once './view/UserView.inc.php';
+<<<<<<< HEAD
+require_once './view/YaddaView.inc.php';
+=======
 require_once './model/AuthA.inc.php';
+>>>>>>> Peter
 
 class Controller {
     private $model; // bliver sat i action()
     private $get;
     private $post;
     private $function;
+    private $file;
     // are cookies allowed
 
     // Called with param in URL: ?f=
@@ -58,14 +64,23 @@ class Controller {
                 }
                 header("Location: ./index.php");
                 break;
+            case 'yadda':   //yadda form
+                $this->model = new Yadda(null, null, null, null, null, null, null); // init a model
+                $view1 = new YaddaView($this->model);// init a view
+                if (count($this->post) > 0) {
+                    $this->createYadda($this->post, $this->file);               // activate controller
+                }
+                $view1->display();
+                break;
             //case osv...
         }
     }
     
-    public function __construct($get, $post) {
+    public function __construct($get, $post, $file) {
         //$this->model = $model;
         $this->get = $get;
         $this->post = $post;
+        $this->file = $file;
         foreach ($get as $key => $value) {
             $$key = $value;
         }
@@ -96,10 +111,10 @@ class Controller {
         }
     }
     
-    public function createYadda($p) {
+    public function createYadda($p, $f) {
         if (isset($p) && count($p) > 0) {
             $p['id'] = null; // augment array with dummy
-            $yadda = Yadda::createObject($p);  // object from array
+            $yadda = Yadda::createObject($p, $f);  // object from array
             $yadda->create();         // model method to insert into db
             $p = array();
         }

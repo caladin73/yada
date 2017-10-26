@@ -7,6 +7,7 @@
  */
 
 require_once './model/Users.inc.php';
+require_once './model/Yadda.inc.php';
 
 abstract class View {
     
@@ -44,7 +45,7 @@ abstract class View {
             <ul id='menu'>\n
                 <li><a href='%s?f=home'>Home</a></li>\n",
                 $_SERVER['PHP_SELF']);
-        if (Authentication::isAuthenticated()) {
+        if (!Authentication::isAuthenticated()) {
             $s .= sprintf("               
                 <li><a href='%s?f=yadda'>Yaddas</a></li>\n
                 <li><a href='%s?f=profile'>Profile</a></li>\n",
