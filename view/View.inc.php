@@ -7,6 +7,7 @@
  */
 
 require_once './model/Users.inc.php';
+require_once './model/Yadda.inc.php';
 
 abstract class View {
     
