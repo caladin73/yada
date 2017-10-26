@@ -113,9 +113,13 @@ class UserView extends View {
     }
     
     private function displayActivate() {
+        /*if (){*/
         $s = sprintf("<main class='main'>\n%s\n%s</main>\n"
                     , $this->displayul()
                     , $this->userActivateForm());
+        /*} else {
+            
+        }*/
         return $s;
     }
 

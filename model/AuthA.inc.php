@@ -13,12 +13,17 @@ abstract class AuthA implements AuthI {
     protected static $logInstance = false;
     protected $userId;
     
-    protected function __construct($user) {
+    protected function __construct($user, $userType) {
         $this->userId = $user;
+        $this->userType = $userType;
     }
         
     public function getUserId() {
         return $this->userId;
+    }
+    
+    public function getUserType() {
+        return $this->userType;
     }
     
     public static function getLoginId() {
@@ -42,5 +47,5 @@ abstract class AuthA implements AuthI {
     }
 
     abstract public static function authenticate($user, $pwd);
-    abstract protected static function dbLookUp($user, $pwd);
+    abstract protected static function dbLookUp($user, $pwd, $userType);
 }

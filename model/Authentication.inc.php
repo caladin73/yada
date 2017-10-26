@@ -9,11 +9,12 @@
 require_once 'AuthA.inc.php'; // include the login parent
 
 class Authentication extends AuthA {
-    protected function __construct($user, $pwd) {
-        parent::__construct($user);
+    protected function __construct($user, $pwd, $userType) {
+        parent::__construct($user, $userType);
         try {
-            self::dbLookUp($user, $pwd);                        // invoke auth
+            self::dbLookUp($user, $pwd, $userType);             // invoke auth
             $_SESSION[self::$sessvar] = $this->getUserId();     // succes
+            $_SESSION[self::$sessvar] = $this->getUserType();
         }
         catch (Exception $e) {
             self::$logInstance = FALSE;
@@ -23,14 +24,14 @@ class Authentication extends AuthA {
 
     public static function authenticate($user, $pwd) {
         if (! self::$logInstance) {
-            self::$logInstance = new Authentication($user, $pwd);
+            self::$logInstance = new Authentication($user, $pwd, null);
         }
         return self::$logInstance;
     }
 
-    protected static function dbLookUp($user, $pwd) {
+    protected static function dbLookUp($user, $pwd, $userType) {
         // Using prepared statement to prevent SQL injection
-        $sql = "select Username, Password 
+        $sql = "select Username, Password, Admin=(:usertype)
                 from Users
                 where Username = :uid
                 and Activated = 1;";
@@ -38,6 +39,7 @@ class Authentication extends AuthA {
         try {
             $q = $dbh->prepare($sql);
             $q->bindValue(':uid', $user);
+            $q->bindValue(':usertype', $userType);
             $q->execute();
             $row = $q->fetch();
             if (!($row['Username'] === $user
