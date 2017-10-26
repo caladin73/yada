@@ -109,7 +109,7 @@ class Controller {
     public function createUser($p) {
         if (isset($p) && count($p) > 0) {
             $p['id'] = null; // augment array with dummy
-            $user = Users::createObject($p);  // object from array
+            $user = new Users($p['username'], $p['password'], $p['name'], $p['email'], null);/*Users::createObject($p);*/  // object from array
             $user->create();         // model method to insert into db
             $p = array();
         }
