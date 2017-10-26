@@ -6,6 +6,8 @@
  * @Author: Daniel, Jesper, Marianne & Peter
  */
 
+require_once './model/Users.inc.php';
+
 abstract class View {
     
     protected $model;
@@ -40,22 +42,22 @@ abstract class View {
         $s = sprintf("        <header>
             <h1>YaddaYaddaYadda &trade;</h1>\n
             <ul id='menu'>\n
-                <li><a href='%s'>Home</a></li>\n",
+                <li><a href='%s?f=home'>Home</a></li>\n",
                 $_SERVER['PHP_SELF']);
         if (Authentication::isAuthenticated()) {
             $s .= sprintf("               
-                <li><a href='%s?f=C'>Yaddas</a></li>\n
-                <li><a href='%s?f=L'>Profile</a></li>\n",
+                <li><a href='%s?f=yadda'>Yaddas</a></li>\n
+                <li><a href='%s?f=profile'>Profile</a></li>\n",
                 $_SERVER['PHP_SELF'], $_SERVER['PHP_SELF'], $_SERVER['PHP_SELF'], $_SERVER['PHP_SELF']);
         } else {
-            $s .= sprintf("                <li><a href='%s?f=U'>Register User</a></li>\n",
+            $s .= sprintf("                <li><a href='%s?f=register'>Register User</a></li>\n",
                 $_SERVER['PHP_SELF']);
         }
         if (!Authentication::isAuthenticated()) {
-            $s .= sprintf("                 <li><a href='%s?f=A'>Login</a></li>\n"
+            $s .= sprintf("                 <li><a href='%s?f=login'>Login</a></li>\n"
                     , $_SERVER['PHP_SELF']);
         } else { 
-            $s .= sprintf("                 <li><a href='%s?f=Z'>Logout</a></li>\n"
+            $s .= sprintf("                 <li><a href='%s?f=logout'>Logout</a></li>\n"
                     , $_SERVER['PHP_SELF']);
         }
         $s .= sprintf("             </ul>\n        </header>\n");
