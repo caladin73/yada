@@ -10,11 +10,8 @@ require_once './model/Users.inc.php';
 require_once './model/Yadda.inc.php';
 require_once './view/LoginView.inc.php';
 require_once './view/UserView.inc.php';
-<<<<<<< HEAD
 require_once './view/YaddaView.inc.php';
-=======
 require_once './model/AuthA.inc.php';
->>>>>>> Peter
 
 class Controller {
     private $model; // bliver sat i action()
