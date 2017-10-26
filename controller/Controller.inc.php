@@ -17,6 +17,7 @@ class Controller {
     private $get;
     private $post;
     private $function;
+    private $file;
     // are cookies allowed
 
     // Called with param in URL: ?f=
@@ -60,7 +61,7 @@ class Controller {
                 $this->model = new Yadda(null, null, null, null, null, null, null); // init a model
                 $view1 = new YaddaView($this->model);// init a view
                 if (count($this->post) > 0) {
-                    $this->createYadda($this->post);               // activate controller
+                    $this->createYadda($this->post, $this->file);               // activate controller
                 }
                 $view1->display();
                 break;
@@ -68,10 +69,11 @@ class Controller {
         }
     }
     
-    public function __construct($get, $post) {
+    public function __construct($get, $post, $file) {
         //$this->model = $model;
         $this->get = $get;
         $this->post = $post;
+        $this->file = $file;
         foreach ($get as $key => $value) {
             $$key = $value;
         }
@@ -101,10 +103,10 @@ class Controller {
         }
     }
     
-    public function createYadda($p) {
+    public function createYadda($p, $f) {
         if (isset($p) && count($p) > 0) {
             $p['id'] = null; // augment array with dummy
-            $yadda = Yadda::createObject($p);  // object from array
+            $yadda = Yadda::createObject($p, $f);  // object from array
             $yadda->create();         // model method to insert into db
             $p = array();
         }

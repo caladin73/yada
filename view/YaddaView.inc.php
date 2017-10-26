@@ -28,12 +28,17 @@ class YaddaView extends View {
     
     private function yaddaForm() {
         $s = sprintf("
-            <form action='%s?f=yadda' method='post'>\n
+            <form action='%s?f=yadda' method='post' enctype='multipart/form-data'>\n
             <div class='gets'>\n
                 <h3>Post a Yadda &trade;!</h3>\n
                 <p>\n
                     Message:<br/>
-                    <input type='text' name='text'/>\n
+                    <input type='text' name='Text' required/>\n
+                </p>\n
+                <p>\n
+                    Image:<br/>
+                    <input type='hidden' name='MAX_FILE_SIZE' value='131072'/>
+                    <input type='file' name='img' accept='image/*'/>\n
                 </p>\n
                 <p>\n
                     <input type='submit' value='Go'/>
@@ -46,15 +51,14 @@ class YaddaView extends View {
     }
     
     private function displayYadda() {
-        $s = sprintf("<main class='main'>\n%s</main>\n"
+        $s = sprintf("<main class='main'>\n%s\n%s</main>\n"
                     , $this->yaddaForm()
                     , $this->displayManyYaddas());
         return $s;
     }
     
     public function display() {
-        $this->output($this->yaddaForm());
-        $this->output($this->displayManyYaddas());
+        $this->output($this->displayYadda());
     }
     
 }
