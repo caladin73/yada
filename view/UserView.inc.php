@@ -15,7 +15,7 @@ class UserView extends View {
     }
     
     private function displayul() {
-        $users = Users::retrievem();
+        $users = Users::retrieveMany();
         $s = "<div class='haves'>";
         foreach ($users as $user) {
             $s .=  sprintf("%s<br/>\n"
@@ -37,7 +37,7 @@ class UserView extends View {
 
         private function registerForm() {
         $s = sprintf("
-            <form action='%s?f=register' method='post'>\n
+            <form id='formalia' action='%s?f=register' method='post' enctype=\"multipart/form-data\">\n
             <div class='gets'>\n
                 <h3>Create New User</h3>\n
                 <p>\n
@@ -46,15 +46,15 @@ class UserView extends View {
                 </p>\n
                 <p>\n
                     Email:<br/>
-                    <input type='text' name='email'/>\n
+                    <input type='email' name='email'/>\n
                 </p>\n
                 <p>\n
                     Name:<br/>
                     <input type='text' name='name'/>\n
                 </p>\n
                 <p>\n
-                    Username:<br/>
-                    <input type='file' name='profileimage'/>\n
+                    Profile Image:<br/>
+                <input type=\"file\" name=\"profileimage\" accept=\"image/*\">\n
                 </p>\n
                 <p>\n
                     Pwd:<br/>
@@ -76,12 +76,46 @@ class UserView extends View {
         }
         $s .= "          </div>\n";
         $s .= "          </form>\n";
+        include_once './js/createUserVerify.js';
         return $s;
     }
-    
+
+    private function userActivateForm() {
+        $s = sprintf("
+            <form action='%s?f=profile' method='post'>\n
+            <div class='gets'>\n
+                <h3>Activate User</h3>\n
+                <p>\n
+                    Username:<br/>
+                    <input type='text' name='username'/>\n
+                </p>\n
+                <input type='radio' name='activated' value='1' checked> Activate<br>
+                <input type='radio' name='activated' value='0'> Deactivate<br>
+                <p>\n
+                    <input type='submit' value='Go'/>
+                </p>
+            </div>", $_SERVER['PHP_SELF']);
+
+        if (!Model::areCookiesEnabled()) {
+            $s .= "<tr><td colspan='2' class='err'>Cookies 
+            from this domain must be 
+                      enabled before attempting login.</td></tr>";
+        }
+        $s .= "          </div>\n";
+        $s .= "          </form>\n";
+        return $s;
+    }
+
     private function displayRegister() {
         $s = sprintf("<main class='main'>\n%s</main>\n"
                     , $this->registerForm());
+        return $s;
+    }
+    
+    private function displayActivate() {
+        $s = sprintf("<main class='main'>\n%s\n%s</main>\n"
+                    , $this->displayul()
+                    , $this->userActivateForm());
         return $s;
     }
 
@@ -89,4 +123,7 @@ class UserView extends View {
        $this->output($this->displayRegister());
     }
     
+    public function displayAdmin() {
+        $this->output($this->displayActivate());
+    }
 }

@@ -1,51 +1,46 @@
 <?php
-/*
- * Login mechanism for educational purposes.
- * Experimental
- * Should be project agnostic
- * Copyright nml, 2015
+
+/* 
+ * model/AuthA.inc.php
+ * @Project: YaddaYaddaYadda
+ * @Author: Daniel, Jesper, Marianne & Peter
  */
 
-/**
- * Abstract class for the login mechanism.
- * @author nml
- */
-abstract class AuthA {
-  const SESSVAR = 'nAuth42';
-  protected $userId;
-  protected $email;
-  protected static $logInstance = NULL;
+require_once 'AuthI.inc.php';
 
-
-  public static function isAuthenticated() {
-    return isset($_SESSION[self::SESSVAR]) ? true : false;
-  }
-
-  private static function setTestCookie() {
-    setcookie('foo', 'bar', time() + 3600);
-  }
-
-  public static function areCookiesEnabled() {
-    self::setTestCookie();
-    return (isset($_COOKIE['foo']) && $_COOKIE['foo'] == 'bar') ? true : false;
-  }
+abstract class AuthA implements AuthI {
+    protected static $sessvar = 'yAuth58'; // if set = logged on
+    protected static $logInstance = false;
+    protected $userId;
     
-  public static function logout() {
-    session_start();
-    session_unset();
-    session_destroy();
-    session_write_close();
-    setcookie(session_name(), '', 0, '/');
-    session_regenerate_id(true);
-  }
-    
-    abstract protected function dbLookUp($user, $passwordattempt);
-    
-    protected function getUserId() {
+    protected function __construct($user) {
+        $this->userId = $user;
+    }
+        
+    public function getUserId() {
         return $this->userId;
     }
     
-    protected function getEmail() {
-        return $this->email;
+    public static function getLoginId() {
+        return isset($_SESSION[self::$sessvar]) ? $_SESSION[self::$sessvar] : 'nobody';
     }
+
+    public static function isAuthenticated() {
+      return isset($_SESSION[self::$sessvar]) ? true : false;
+    }
+    
+    public static function isAdministrator() {
+        
+    }
+
+    public static function logout() {
+        setcookie(session_name(), '', 0, '/');
+        session_unset();
+        session_destroy();
+        session_write_close();
+        unset($_SESSION[self::$sessvar]);
+    }
+
+    abstract public static function authenticate($user, $pwd);
+    abstract protected static function dbLookUp($user, $pwd);
 }
