@@ -8,6 +8,8 @@
 
 error_reporting(E_ALL);
 
+require_once 'Authentication.inc.php';
+
 class Yadda {
     private $yaddaID;
     private $text;
@@ -73,7 +75,7 @@ class Yadda {
         $this->imagetype = $imagetype;
     }
 
-        public function create() {
+    public function create() {            
                 
         $sql = "INSERT INTO Yadda (Text, Username) values (:text, :Username)";
         $dbh = Model::connect();
@@ -100,21 +102,19 @@ class Yadda {
             $q->bindValue(':yaddaid', $lastID);
             
             $q->execute();
+            $dbh->query('commit');
             
         } catch(PDOException $e) {
             die("<p>Insert of Image failed: <br/>%s</p>\n".
                 $e->getMessage());
         }
-        
-        $dbh->query('commit');
     }
         
     public static function createObject ($a, $f) {
         
         // TODO aktiver Session fremfor predefined user
-        //$un = $_SESSION['user'];
-        $un = 'Jesper';
-        
+        $un = Authentication::getLoginId();
+                
         $imagedata = addslashes(file_get_contents($f['img']['tmp_name']));
         $imagetype = $f['img']['type'];
         

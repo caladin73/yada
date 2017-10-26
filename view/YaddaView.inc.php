@@ -8,7 +8,6 @@
 
 require_once 'view/View.inc.php';
 
-
 class YaddaView extends View {
     
     public function __construct($model) {
@@ -38,7 +37,7 @@ class YaddaView extends View {
                 <p>\n
                     Image:<br/>
                     <input type='hidden' name='MAX_FILE_SIZE' value='131072'/>
-                    <input type='file' name='img' accept='image/*'/>\n
+                    <input type='file' name='img' accept='image/*' required/>\n
                 </p>\n
                 <p>\n
                     <input type='submit' value='Go'/>
