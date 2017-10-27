@@ -138,21 +138,23 @@ class Yadda {
                 $e->getMessage());
         }       
         
-        $sql = "INSERT INTO Image (Imagedata, mimetype, YaddaID) values (:imagedata, :imagetype, :yaddaid)";
-        
-        try {
-            $q = $dbh->prepare($sql);
-            $q->bindValue(':imagedata', $this->getImagedata());
-            $q->bindValue(':imagetype', $this->getImagetype());
-            $q->bindValue(':yaddaid', $lastID);
-            
-            $q->execute();
-            $dbh->query('commit');
-            
-        } catch(PDOException $e) {
-            
-            die("<p>Insert of Image failed: <br />%s</p>\n".$e->getMessage());
-            $dbh->query('rollback'); //TODO Tags skal også fjernes
+        if($this->getImagetype() <> "") {
+            $sql = "INSERT INTO Image (Imagedata, mimetype, YaddaID) values (:imagedata, :imagetype, :yaddaid)";
+
+            try {
+                $q = $dbh->prepare($sql);
+                $q->bindValue(':imagedata', $this->getImagedata());
+                $q->bindValue(':imagetype', $this->getImagetype());
+                $q->bindValue(':yaddaid', $lastID);
+
+                $q->execute();
+                $dbh->query('commit');
+
+            } catch(PDOException $e) {
+
+                die("<p>Insert of Image failed: <br />%s</p>\n".$e->getMessage());
+                $dbh->query('rollback'); //TODO Tags skal også fjernes
+            }
         }
     }
         
@@ -161,11 +163,13 @@ class Yadda {
         $username = Authentication::getLoginId();        
         $yadda = new Yadda(null, $a['text'], $username, null, 0, 0);
         
-        $imagedata = addslashes(file_get_contents($f['img']['tmp_name']));
-        $imagetype = $f['img']['type'];
-        
-        $yadda->setImagedata($imagedata);
-        $yadda->setImagetype($imagetype);
+        if($f['img']['name'] != '') {
+            $imagedata = addslashes(file_get_contents($f['img']['tmp_name']));
+            $imagetype = $f['img']['type'];
+
+            $yadda->setImagedata($imagedata);
+            $yadda->setImagetype($imagetype);
+        }
         
         if(isset($a['reply']) && $a['reply']) {
             $yadda->setChild(true);
@@ -205,7 +209,7 @@ class Yadda {
             $indent = 20;
         }
         $s = "<div class='yadda' style='position:relative;left:".$indent."px;'>\n";
-            //<div class='user'> background-color:red;
+            
             $s .= "<span class='user'>\n"
                     ."<img width='20' height='20' src='getImage.php?id=".$this->getUsername()."' />\n"
                     ."<a href='getUserProfile.php?id=".$this->getUsername()."'><b> $".$this->getUsername().": </b></a>\n</span>\n"
@@ -226,7 +230,7 @@ class Yadda {
                             <p>\n
                                 Image:<br/>
                                 <input type='hidden' name='MAX_FILE_SIZE' value='131072'/>
-                                <input type='file' name='img' accept='image/*' required/>\n
+                                <input type='file' name='img' accept='image/*' />\n
                             </p>\n
                             <input type='submit' name='reply'>\n
                           </form> ";
